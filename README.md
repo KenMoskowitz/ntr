@@ -9,10 +9,23 @@ Stack: GitHub → Astro → Sanity.io → Vercel.
 ## Branch / preview workflow
 
 All work happens on `claude/ntr-link-rebuild-ij2a2t` — **never `main`**.
-Vercel should be connected to auto-deploy Preview URLs from this branch (or
-from a PR opened against `main`); production only updates once this branch
-is reviewed and explicitly merged. Do not merge to `main` without asking
-first.
+
+**Live preview:** https://ntr-eta.vercel.app (Vercel project `ntr`, team
+"Ken's Web Projects").
+
+`main` on GitHub currently has no app code — just a README — so importing
+the repo into Vercel initially failed to detect a framework. To get a real
+preview live now, Vercel's **Production branch** was temporarily pointed at
+`claude/ntr-link-rebuild-ij2a2t` instead of `main` (Environments → Production
+→ Branch Tracking), with Root Directory `web` and Framework Preset `Astro`
+set explicitly. This means **the Vercel "Production" deployment is this
+branch, not `main`, until further notice** — don't assume `main` reflects
+what's live.
+
+**Follow-up once this branch merges to `main`:** switch Vercel's Production
+branch back to `main` in the same settings panel, so deploys track the
+default branch normally again. Flagging this here so it doesn't get
+forgotten post-merge.
 
 ## Status: what's done vs. what's blocked on you
 
@@ -56,10 +69,11 @@ five minutes of manual setup — see "Manual setup" below.
    - Run `npm run seed` from `studio/` to load the plan's copy in.
    - Invite editor(s) in sanity.io/manage → Members (defaulted to just you,
      ken@adzombies.com, for now — add others when you have real emails).
-2. Link Vercel: `cd web && vercel link --yes --scope <your-team> --project ntrlink`
-   (never bare `vercel link --yes` without `--project` — it silently creates
-   a phantom project named after the folder). Set the project's root
-   directory to `web/`. Connect the GitHub repo for branch-preview deploys.
+2. ~~Link Vercel~~ — done. Project `ntr` under "Ken's Web Projects", Root
+   Directory `web`, Framework Preset `Astro`, live at
+   https://ntr-eta.vercel.app. Production branch is temporarily
+   `claude/ntr-link-rebuild-ij2a2t` (see "Branch / preview workflow" above)
+   — switch it back to `main` after this branch merges.
 3. Set these env vars in Vercel (Production + Preview):
    - `SANITY_PROJECT_ID`, `SANITY_DATASET` (=`production`) — public, used by
      the Astro build to read content.
