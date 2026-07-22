@@ -1,0 +1,62 @@
+---
+interface Props {
+  navigation?: {headerLinks?: {label: string; href: string}[]} | null
+  siteSettings?: {phone?: string; siteName?: string} | null
+}
+const {navigation, siteSettings} = Astro.props
+
+const links = navigation?.headerLinks?.length
+  ? navigation.headerLinks
+  : [
+      {label: 'Home', href: '/'},
+      {label: 'Services', href: '/services'},
+      {label: 'Team & Culture', href: '/team'},
+      {label: 'Careers', href: '/careers'},
+      {label: 'Contact', href: '/contact'},
+    ]
+
+const phone = siteSettings?.phone || '844-687-5465'
+const siteName = siteSettings?.siteName || 'NTR Link'
+---
+
+<header class="site-header">
+  <a class="logo" href="/">
+    <img src="/images/logo-header.png" alt={siteName} width="160" height="48" />
+  </a>
+  <nav>
+    <ul>
+      {links.map((link) => (
+        <li><a href={link.href}>{link.label}</a></li>
+      ))}
+    </ul>
+  </nav>
+  <a class="header-phone" href={`tel:${phone.replace(/[^0-9+]/g, '')}`}>{phone}</a>
+</header>
+
+<style>
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1rem 2rem;
+  }
+  nav ul {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  nav a {
+    text-decoration: none;
+    color: inherit;
+    font-weight: 600;
+  }
+  .header-phone {
+    font-weight: 700;
+    text-decoration: none;
+    color: inherit;
+    white-space: nowrap;
+  }
+</style>

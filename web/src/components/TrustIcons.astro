@@ -1,0 +1,28 @@
+---
+interface Props {
+  items?: string[]
+}
+const {items} = Astro.props
+const bullets = items?.length
+  ? items
+  : ['Therapist owned and operated', 'One point of contact, not a call center', 'State and nationally licensed providers']
+---
+
+<ul class="trust-icons">
+  {bullets.map((item) => (
+    <li>{item}</li>
+  ))}
+</ul>
+
+<style>
+  .trust-icons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+    list-style: none;
+    margin: 1.5rem 0;
+    padding: 0;
+    font-weight: 600;
+  }
+</style>

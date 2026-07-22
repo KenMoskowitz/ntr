@@ -1,0 +1,45 @@
+---
+interface Props {
+  title: string
+  state: string
+  employmentType?: string
+  description?: string
+  datePosted?: string
+  validThrough?: string
+}
+const {title, state, employmentType, description, datePosted, validThrough} = Astro.props
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'JobPosting',
+  title,
+  datePosted,
+  validThrough,
+  employmentType: employmentType ? [employmentType] : ['PART_TIME', 'FULL_TIME'],
+  hiringOrganization: {'@type': 'Organization', name: 'National TeleTherapy Resources'},
+  jobLocationType: 'TELECOMMUTE',
+  applicantLocationRequirements: {'@type': 'Country', name: 'USA'},
+}
+---
+
+<article class="job-card">
+  <h3>{title}</h3>
+  <p class="state">{state}</p>
+  {description && <p>{description}</p>}
+  <a href="/contact">Apply</a>
+</article>
+
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+<style>
+  .job-card {
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    padding: 1.25rem;
+    margin: 1rem 0;
+  }
+  .state {
+    font-weight: 600;
+    opacity: 0.75;
+  }
+</style>

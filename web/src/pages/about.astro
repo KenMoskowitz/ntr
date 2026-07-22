@@ -1,0 +1,53 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Hero from '../components/Hero.astro'
+import CTABlock from '../components/CTABlock.astro'
+import {sanityFetch} from '../lib/sanity'
+
+const cms = await sanityFetch(`*[_type == "page" && pageId == "about"][0]`)
+
+const title = cms?.metaTitle || 'About NTR Link | Therapist Owned Teletherapy Staffing'
+const description =
+  cms?.metaDescription ||
+  'NTR Link is a therapist-owned teletherapy staffing company placing licensed SLPs and OTs into public school districts nationwide since 2015.'
+const heroHeadline = cms?.heroHeadline || 'A Therapist Started This Company Because She Saw the Gap Firsthand'
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {'@type': 'ListItem', position: 1, name: 'Home', item: 'https://ntrlink.com/'},
+      {'@type': 'ListItem', position: 2, name: 'About', item: 'https://ntrlink.com/about'},
+    ],
+  },
+]
+---
+
+<BaseLayout title={title} description={description} canonicalUrl="https://ntrlink.com/about" jsonLd={jsonLd}>
+  <Hero headline={heroHeadline}>
+    <div class="about-body">
+      <p>
+        NTR Link — National TeleTherapy Resources — has been placing licensed speech-language pathologists and
+        occupational therapists into public school districts since 2015. We started therapist owned and we're still
+        therapist run, which shapes every decision we make about how districts get staffed.
+      </p>
+      <p>
+        Every district gets a dedicated program coordinator: one person who knows your caseload, not a rotating help
+        desk. Our therapists are state and nationally licensed, and we train on-site staff as facilitators so virtual
+        sessions integrate into the classroom instead of feeling bolted on. Progress reporting ties directly to IEP
+        goals, so the data your team needs for compliance is the same data that shows whether therapy is working.
+      </p>
+    </div>
+  </Hero>
+  <CTABlock />
+</BaseLayout>
+
+<style>
+  .about-body {
+    max-width: 40rem;
+    margin: 1.5rem auto 0;
+    text-align: left;
+    line-height: 1.7;
+  }
+</style>

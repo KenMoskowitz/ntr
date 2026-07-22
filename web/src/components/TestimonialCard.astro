@@ -1,0 +1,28 @@
+---
+interface Props {
+  quote: string
+  attributionName?: string
+  attributionRole?: string
+  attributionDistrict?: string
+}
+const {quote, attributionName, attributionRole, attributionDistrict} = Astro.props
+const attribution = [attributionName, attributionRole, attributionDistrict].filter(Boolean).join(', ')
+---
+
+<blockquote class="testimonial">
+  <p>&ldquo;{quote}&rdquo;</p>
+  {attribution && <footer>&mdash; {attribution}</footer>}
+</blockquote>
+
+<style>
+  .testimonial {
+    border-left: 3px solid currentColor;
+    padding-left: 1rem;
+    margin: 1.5rem 0;
+  }
+  footer {
+    margin-top: 0.5rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+</style>

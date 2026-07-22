@@ -1,0 +1,33 @@
+---
+interface Props {
+  faqs: {question: string; answer: string}[]
+}
+const {faqs} = Astro.props
+---
+
+{faqs?.length > 0 && (
+  <section class="faq-accordion">
+    <h2>Frequently Asked Questions</h2>
+    {faqs.map((faq) => (
+      <details>
+        <summary>{faq.question}</summary>
+        <p>{faq.answer || 'Answer pending.'}</p>
+      </details>
+    ))}
+  </section>
+)}
+
+<style>
+  .faq-accordion {
+    max-width: 45rem;
+    margin: 2rem auto;
+  }
+  details {
+    border-bottom: 1px solid #ddd;
+    padding: 0.75rem 0;
+  }
+  summary {
+    font-weight: 600;
+    cursor: pointer;
+  }
+</style>

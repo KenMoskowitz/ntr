@@ -1,0 +1,101 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Hero from '../components/Hero.astro'
+import TestimonialCard from '../components/TestimonialCard.astro'
+import {sanityFetch} from '../lib/sanity'
+
+const cms = await sanityFetch(
+  `*[_type == "page" && pageId == "results"][0]{..., stats[]->, testimonials[]->}`,
+)
+
+const title = cms?.metaTitle || 'Results | Student Outcomes with NTR Link'
+const description =
+  cms?.metaDescription ||
+  "See the real numbers behind NTR Link's virtual therapy programs, from IEP goal progress to therapist retention."
+const heroHeadline = cms?.heroHeadline || 'The Numbers Behind the Claim'
+const stats = cms?.stats || []
+const testimonials = cms?.testimonials || []
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {'@type': 'ListItem', position: 1, name: 'Home', item: 'https://ntrlink.com/'},
+      {'@type': 'ListItem', position: 2, name: 'Results', item: 'https://ntrlink.com/results'},
+    ],
+  },
+]
+---
+
+<BaseLayout title={title} description={description} canonicalUrl="https://ntrlink.com/results" jsonLd={jsonLd}>
+  <Hero headline={heroHeadline} />
+  {stats.length > 0 ? (
+    <section class="stats-grid">
+      {stats.map((stat: any) => (
+        <div class="stat">
+          <p class="stat-number">{stat.statNumber}</p>
+          <p class="stat-label">{stat.statLabel}</p>
+        </div>
+      ))}
+    </section>
+  ) : (
+    <p class="pending-note">
+      We're building this page around real numbers &mdash; therapist retention, average time to fill an open
+      position, districts served, IEP goal completion rates. Add them in Sanity under Outcome Stats as they're
+      tracked.
+    </p>
+  )}
+  <section class="testimonials">
+    {testimonials.map((t: any) => (
+      <TestimonialCard
+        quote={t.quote}
+        attributionName={t.attributionName}
+        attributionRole={t.attributionRole}
+        attributionDistrict={t.attributionDistrict}
+      />
+    ))}
+  </section>
+  <p class="proof-links">
+    See how this shows up in practice: <a href="/speech-therapy">Speech-Language Therapy</a> &middot;{' '}
+    <a href="/occupational-therapy">Occupational Therapy</a>
+  </p>
+</BaseLayout>
+
+<style>
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    gap: 1.5rem;
+    max-width: 50rem;
+    margin: 0 auto 2rem;
+    padding: 0 2rem;
+    text-align: center;
+  }
+  .stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+  }
+  .stat-label {
+    margin: 0;
+    opacity: 0.75;
+  }
+  .pending-note {
+    max-width: 40rem;
+    margin: 0 auto 2rem;
+    padding: 0 2rem;
+    text-align: center;
+    opacity: 0.7;
+    font-style: italic;
+  }
+  .testimonials {
+    max-width: 40rem;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+  .proof-links {
+    text-align: center;
+    padding: 2rem;
+  }
+</style>

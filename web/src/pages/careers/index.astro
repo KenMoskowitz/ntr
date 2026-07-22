@@ -1,0 +1,77 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import Hero from '../../components/Hero.astro'
+import JobCard from '../../components/JobCard.astro'
+import {sanityFetch} from '../../lib/sanity'
+
+const cms = await sanityFetch(`*[_type == "page" && pageId == "careers"][0]{..., jobOpenings[]->}`)
+const statePages =
+  (await sanityFetch(`*[_type == "stateJobPage"] | order(stateName asc){stateName, slug}`)) || [
+    {stateName: 'California', slug: {current: 'california'}},
+    {stateName: 'Tennessee', slug: {current: 'tennessee'}},
+  ]
+
+const title = cms?.metaTitle || 'Careers | Virtual SLP & OT Jobs | NTR Link'
+const description =
+  cms?.metaDescription ||
+  "Remote speech-language pathologist and occupational therapist jobs with NTR Link. Licensed in your state? We're hiring."
+const heroHeadline = cms?.heroHeadline || "Work From Home. Still Change a Kid's Whole Year."
+const jobOpenings = cms?.jobOpenings || []
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {'@type': 'ListItem', position: 1, name: 'Home', item: 'https://ntrlink.com/'},
+      {'@type': 'ListItem', position: 2, name: 'Careers', item: 'https://ntrlink.com/careers'},
+    ],
+  },
+]
+---
+
+<BaseLayout title={title} description={description} canonicalUrl="https://ntrlink.com/careers" jsonLd={jsonLd}>
+  <Hero headline={heroHeadline} />
+  <section class="state-picker">
+    <h2>Find jobs in your state</h2>
+    <ul>
+      {statePages.map((state) => (
+        <li><a href={`/careers/${state.slug.current}`}>{state.stateName}</a></li>
+      ))}
+    </ul>
+  </section>
+  <section class="job-list">
+    {jobOpenings.map((job: any) => (
+      <JobCard
+        title={job.title}
+        state={job.state}
+        employmentType={job.employmentType}
+        description={job.description}
+        datePosted={job.datePosted}
+        validThrough={job.validThrough}
+      />
+    ))}
+  </section>
+</BaseLayout>
+
+<style>
+  .state-picker {
+    max-width: 40rem;
+    margin: 0 auto 1.5rem;
+    padding: 0 2rem;
+    text-align: center;
+  }
+  .state-picker ul {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    list-style: none;
+    padding: 0;
+    flex-wrap: wrap;
+  }
+  .job-list {
+    max-width: 40rem;
+    margin: 0 auto;
+    padding: 0 2rem 2rem;
+  }
+</style>

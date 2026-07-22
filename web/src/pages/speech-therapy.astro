@@ -1,0 +1,62 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Hero from '../components/Hero.astro'
+import FAQAccordion from '../components/FAQAccordion.astro'
+import CTABlock from '../components/CTABlock.astro'
+import {sanityFetch} from '../lib/sanity'
+
+const cms = await sanityFetch(`*[_type == "servicePage" && slug.current == "speech-therapy"][0]`)
+
+const title = cms?.metaTitle || 'Virtual Speech-Language Therapy for Schools | NTR Link'
+const description =
+  cms?.metaDescription ||
+  'Licensed SLPs delivering virtual speech-language therapy to public school students, with real-time progress data for IEP teams.'
+const heroHeadline = cms?.heroHeadline || 'Virtual Speech-Language Therapy That Keeps Up With Your Caseload'
+const heroSubhead =
+  cms?.heroSubhead ||
+  'Language, articulation, fluency, social communication, AAC — delivered virtually by licensed SLPs who stay with your district week after week.'
+
+const faqs = cms?.faqs?.length
+  ? cms.faqs
+  : [
+      {question: 'How fast can NTR place a speech therapist in an open position?', answer: ''},
+      {question: 'Does virtual speech therapy count for IEP compliance?', answer: ''},
+      {question: 'Who documents Medicaid billing for teletherapy sessions?', answer: ''},
+      {question: 'What happens if our assigned therapist is out sick?', answer: ''},
+      {question: 'Can therapists attend IEP meetings virtually?', answer: ''},
+    ]
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    serviceType: 'Virtual Speech-Language Therapy for Schools',
+    provider: {'@type': 'Organization', name: 'National TeleTherapy Resources'},
+    areaServed: 'US',
+    audience: {'@type': 'Audience', audienceType: 'School Districts'},
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq: any) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {'@type': 'Answer', text: faq.answer || 'Answer pending.'},
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {'@type': 'ListItem', position: 1, name: 'Home', item: 'https://ntrlink.com/'},
+      {'@type': 'ListItem', position: 2, name: 'Speech-Language Therapy', item: 'https://ntrlink.com/speech-therapy'},
+    ],
+  },
+]
+---
+
+<BaseLayout title={title} description={description} canonicalUrl="https://ntrlink.com/speech-therapy" jsonLd={jsonLd}>
+  <Hero headline={heroHeadline} subhead={heroSubhead} />
+  <CTABlock buttons={[{label: 'Request services', href: '/contact'}, {label: 'See results', href: '/results'}]} />
+  <FAQAccordion faqs={faqs} />
+</BaseLayout>

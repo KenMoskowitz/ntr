@@ -1,0 +1,74 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import Hero from '../../components/Hero.astro'
+import {sanityFetch} from '../../lib/sanity'
+
+const cms = await sanityFetch(`*[_type == "page" && pageId == "services-index"][0]`)
+
+const title = cms?.metaTitle || 'Our Services | NTR Link Virtual School Therapy'
+const description =
+  cms?.metaDescription ||
+  "Explore NTR Link's virtual speech-language and occupational therapy programs built for public school districts."
+const heroHeadline = cms?.heroHeadline || 'Two Services. One Team. Zero Guesswork.'
+const heroSubhead =
+  cms?.heroSubhead ||
+  "Two ways we show up for your students: Speech-Language Therapy and Occupational Therapy, both delivered virtually, both built around your district's actual schedule."
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {'@type': 'ListItem', position: 1, name: 'Home', item: 'https://ntrlink.com/'},
+      {'@type': 'ListItem', position: 2, name: 'Services', item: 'https://ntrlink.com/services'},
+    ],
+  },
+]
+---
+
+<BaseLayout title={title} description={description} canonicalUrl="https://ntrlink.com/services" jsonLd={jsonLd}>
+  <Hero headline={heroHeadline} subhead={heroSubhead} />
+  <section class="service-cards">
+    <a class="service-card" href="/speech-therapy">
+      <h2>Speech-Language Therapy</h2>
+      <p>Language, articulation, fluency, social communication, AAC.</p>
+    </a>
+    <a class="service-card" href="/occupational-therapy">
+      <h2>Occupational Therapy</h2>
+      <p>Fine motor, visual-motor integration, sensory processing, executive functioning.</p>
+    </a>
+  </section>
+  <section class="implementation">
+    <h2>Simple Implementation Process</h2>
+    <ol>
+      <li>We match your district with licensed therapists in your state.</li>
+      <li>A dedicated program coordinator sets up scheduling around your school calendar.</li>
+      <li>Therapists deliver sessions virtually, with on-site staff trained as facilitators.</li>
+      <li>Progress reports tie back to IEP goals so your team always has current documentation.</li>
+    </ol>
+  </section>
+</BaseLayout>
+
+<style>
+  .service-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 1.5rem;
+    max-width: 50rem;
+    margin: 0 auto 2rem;
+    padding: 0 2rem;
+  }
+  .service-card {
+    display: block;
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    text-decoration: none;
+    color: inherit;
+  }
+  .implementation {
+    max-width: 40rem;
+    margin: 0 auto 2rem;
+    padding: 0 2rem;
+  }
+</style>

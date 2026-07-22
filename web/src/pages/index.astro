@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Hero from '../components/Hero.astro'
+import TrustIcons from '../components/TrustIcons.astro'
+import CTABlock from '../components/CTABlock.astro'
+import {sanityFetch} from '../lib/sanity'
+
+const cms = await sanityFetch(`*[_type == "page" && pageId == "home"][0]`)
+
+const title = cms?.metaTitle || 'NTR Link | Virtual Speech & OT Services for Schools'
+const description =
+  cms?.metaDescription ||
+  'NTR Link places licensed speech and occupational therapists into school districts nationwide. Solve staffing shortages with a team that shows up.'
+const heroHeadline = cms?.heroHeadline || 'Speech and OT Solutions, Anywhere Your Students Are'
+const heroSubhead =
+  cms?.heroSubhead ||
+  "Special education directors don't lose sleep over paperwork. They lose sleep over the open SLP position nobody's filled since August. NTR Link exists to close that gap, fast, with real licensed therapists who show up the same way every week.\n\nSince 2015, we've grown from one therapist's idea to a nationwide team supporting schools in nearly every related service area. We're therapist owned, therapist run, and small enough that you get one person to call instead of a ticket number."
+const bullets = cms?.bullets
+const ctaButtons = cms?.ctaButtons
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'National TeleTherapy Resources',
+  alternateName: 'NTR Link',
+  url: 'https://ntrlink.com',
+  logo: 'https://ntrlink.com/images/logo-header.png',
+  telephone: '+1-844-687-5465',
+  email: 'info@ntrlink.com',
+  sameAs: [
+    'https://www.facebook.com/nationalteletherapyresources',
+    'https://www.instagram.com/ntrlink/',
+    'https://www.linkedin.com/company/national-teletherapy-resources/',
+  ],
+}
+---
+
+<BaseLayout title={title} description={description} canonicalUrl="https://ntrlink.com/" jsonLd={jsonLd}>
+  <Hero headline={heroHeadline} subhead={heroSubhead} />
+  <TrustIcons items={bullets} />
+  <section class="services-teaser">
+    <p>
+      Two ways we show up for your students: Speech-Language Therapy and Occupational Therapy, both delivered
+      virtually, both built around your district's actual schedule.
+    </p>
+    <a href="/services">See our services &rarr;</a>
+  </section>
+  <CTABlock buttons={ctaButtons} />
+</BaseLayout>
+
+<style>
+  .services-teaser {
+    max-width: 40rem;
+    margin: 0 auto;
+    text-align: center;
+    padding: 0 2rem;
+  }
+</style>

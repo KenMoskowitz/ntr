@@ -1,0 +1,14 @@
+{
+  "redirects": [
+    {
+      "source": "/virtual-occupational-therapy-for-schools",
+      "destination": "/occupational-therapy",
+      "permanent": true
+    },
+    {
+      "source": "/virtual-occupational-therapy-for-schools/",
+      "destination": "/occupational-therapy",
+      "permanent": true
+    }
+  ]
+}

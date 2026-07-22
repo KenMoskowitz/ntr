@@ -1,0 +1,74 @@
+---
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+import {sanityFetch} from '../lib/sanity'
+
+interface Props {
+  title: string
+  description: string
+  canonicalUrl: string
+  ogImage?: string
+  jsonLd?: object | object[]
+  noindex?: boolean
+}
+
+const {title, description, canonicalUrl, ogImage, jsonLd, noindex = false} = Astro.props
+
+const siteSettings = await sanityFetch(`*[_type == "siteSettings"][0]`)
+const navigation = await sanityFetch(`*[_type == "navigation"][0]`)
+
+const gtmId = siteSettings?.analytics?.gtmContainerId
+const ga4Id = siteSettings?.analytics?.ga4MeasurementId
+const pixelId = siteSettings?.analytics?.metaPixelId
+
+const jsonLdBlocks = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : []
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    {noindex && <meta name="robots" content="noindex,nofollow" />}
+
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:type" content="website" />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {ogImage && <meta name="twitter:image" content={ogImage} />}
+
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+
+    {jsonLdBlocks.map((block) => (
+      <script type="application/ld+json" set:html={JSON.stringify(block)} />
+    ))}
+
+    <!-- Analytics slot: populated from Sanity siteSettings.analytics once IDs are confirmed (see SEO Preservation Checklist). No-op until then. -->
+    {gtmId && (
+      <script set:html={`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${gtmId}');`} />
+    )}
+    {ga4Id && (
+      <>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`}></script>
+        <script set:html={`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${ga4Id}');`} />
+      </>
+    )}
+    {pixelId && (
+      <script set:html={`!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','${pixelId}');fbq('track','PageView');`} />
+    )}
+  </head>
+  <body>
+    <Header navigation={navigation} siteSettings={siteSettings} />
+    <main>
+      <slot />
+    </main>
+    <Footer navigation={navigation} siteSettings={siteSettings} />
+  </body>
+</html>

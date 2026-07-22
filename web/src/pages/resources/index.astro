@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import Hero from '../../components/Hero.astro'
+import {sanityFetch} from '../../lib/sanity'
+
+const cms = await sanityFetch(`*[_type == "page" && pageId == "resources-index"][0]`)
+const posts =
+  (await sanityFetch(
+    `*[_type == "resourcePost"] | order(publishDate desc){title, slug, metaDescription, publishDate}`,
+  )) || []
+
+const title = cms?.metaTitle || 'Resources | NTR Link'
+const description =
+  cms?.metaDescription ||
+  'Guides on teletherapy, IEP compliance, and Medicaid billing for special education administrators.'
+const heroHeadline = cms?.heroHeadline || 'Answers for the Research Before the Call'
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {'@type': 'ListItem', position: 1, name: 'Home', item: 'https://ntrlink.com/'},
+      {'@type': 'ListItem', position: 2, name: 'Resources', item: 'https://ntrlink.com/resources'},
+    ],
+  },
+]
+---
+
+<BaseLayout title={title} description={description} canonicalUrl="https://ntrlink.com/resources" jsonLd={jsonLd}>
+  <Hero headline={heroHeadline} />
+  <section class="post-list">
+    {posts.map((post) => (
+      <a class="post-card" href={`/resources/${post.slug.current}`}>
+        <h2>{post.title}</h2>
+        <p>{post.metaDescription}</p>
+      </a>
+    ))}
+  </section>
+</BaseLayout>
+
+<style>
+  .post-list {
+    display: grid;
+    gap: 1.5rem;
+    max-width: 40rem;
+    margin: 0 auto;
+    padding: 0 2rem 2rem;
+  }
+  .post-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    padding: 1.25rem;
+  }
+</style>

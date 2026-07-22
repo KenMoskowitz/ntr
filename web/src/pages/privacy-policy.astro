@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Hero from '../components/Hero.astro'
+import {sanityFetch} from '../lib/sanity'
+
+const cms = await sanityFetch(`*[_type == "page" && pageId == "privacy-policy"][0]`)
+
+const title = cms?.metaTitle || 'Privacy Policy | NTR Link'
+const description = cms?.metaDescription || 'NTR Link privacy policy.'
+const heroHeadline = cms?.heroHeadline || 'Privacy Policy'
+---
+
+<BaseLayout title={title} description={description} canonicalUrl="https://ntrlink.com/privacy-policy" noindex={false}>
+  <Hero headline={heroHeadline}>
+    <div class="policy-body">
+      <p>
+        Full privacy policy text pending &mdash; carry over the existing policy text referenced (but not linked) on
+        the current WordPress site's reCAPTCHA disclaimer, or provide new copy to replace this placeholder before
+        launch.
+      </p>
+    </div>
+  </Hero>
+</BaseLayout>
+
+<style>
+  .policy-body {
+    max-width: 40rem;
+    margin: 1.5rem auto 0;
+    text-align: left;
+    line-height: 1.7;
+  }
+</style>

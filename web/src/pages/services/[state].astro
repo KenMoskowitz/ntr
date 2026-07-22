@@ -1,0 +1,91 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import Hero from '../../components/Hero.astro'
+import CTABlock from '../../components/CTABlock.astro'
+import {sanityFetch} from '../../lib/sanity'
+
+// NOTE: the fallback array must live INSIDE getStaticPaths, not at module top
+// level — Astro's build-time getStaticPaths module doesn't close over sibling
+// top-level `const`s (confirmed by isolated repro; referencing an outer const
+// here throws "X is not defined" at build time even though it works in dev).
+export async function getStaticPaths() {
+  const FALLBACK_STATES = [
+    {
+      stateName: 'California',
+      slug: {current: 'california'},
+      metaTitle: 'Virtual Speech & OT Services for California Schools | NTR Link',
+      metaDescription:
+        'NTR Link places licensed SLPs and OTs into California school districts, with state-specific Medicaid billing and licensure support.',
+      intro:
+        'Virtual therapy staffing for California school districts, built around California licensure and Medi-Cal billing requirements.',
+    },
+    {
+      stateName: 'Tennessee',
+      slug: {current: 'tennessee'},
+      metaTitle: 'Virtual Speech & OT Services for Tennessee Schools | NTR Link',
+      metaDescription:
+        'NTR Link places licensed SLPs and OTs into Tennessee school districts, with state-specific Medicaid billing and licensure support.',
+      intro:
+        'Virtual therapy staffing for Tennessee school districts, built around Tennessee licensure and TennCare billing requirements.',
+    },
+  ]
+
+  const pages = (await sanityFetch(`*[_type == "stateServicePage"]`)) || FALLBACK_STATES
+  return pages.map((page) => ({
+    params: {state: page.slug.current},
+    props: {page},
+  }))
+}
+
+const {page} = Astro.props as {page: any}
+
+const title = page.metaTitle
+const description = page.metaDescription
+const stateName = page.stateName
+const canonicalUrl = `https://ntrlink.com/services/${page.slug.current}`
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    serviceType: 'Virtual Speech-Language and Occupational Therapy for Schools',
+    provider: {'@type': 'Organization', name: 'National TeleTherapy Resources'},
+    areaServed: stateName,
+    audience: {'@type': 'Audience', audienceType: 'School Districts'},
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {'@type': 'ListItem', position: 1, name: 'Home', item: 'https://ntrlink.com/'},
+      {'@type': 'ListItem', position: 2, name: 'Services', item: 'https://ntrlink.com/services'},
+      {'@type': 'ListItem', position: 3, name: stateName, item: canonicalUrl},
+    ],
+  },
+]
+---
+
+<BaseLayout title={title} description={description} canonicalUrl={canonicalUrl} jsonLd={jsonLd}>
+  <Hero headline={`${stateName} School Districts, Staffed and Supported`} subhead={page.intro} />
+  {page.fundingNotes && (
+    <section class="state-notes">
+      <h2>Funding Notes</h2>
+      <p>{page.fundingNotes}</p>
+    </section>
+  )}
+  {page.medicaidNotes && (
+    <section class="state-notes">
+      <h2>Medicaid Billing</h2>
+      <p>{page.medicaidNotes}</p>
+    </section>
+  )}
+  <CTABlock buttons={[{label: 'Request services for your district', href: '/contact'}]} />
+</BaseLayout>
+
+<style>
+  .state-notes {
+    max-width: 40rem;
+    margin: 0 auto 1.5rem;
+    padding: 0 2rem;
+  }
+</style>

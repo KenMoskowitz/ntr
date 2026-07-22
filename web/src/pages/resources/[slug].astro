@@ -1,0 +1,74 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import Hero from '../../components/Hero.astro'
+import {PortableText} from 'astro-portabletext'
+import {sanityFetch} from '../../lib/sanity'
+
+export async function getStaticPaths() {
+  const posts = (await sanityFetch(`*[_type == "resourcePost"]`)) || []
+  return posts.map((post) => ({
+    params: {slug: post.slug.current},
+    props: {post},
+  }))
+}
+
+const {post} = Astro.props as {post: any}
+const canonicalUrl = `https://ntrlink.com/resources/${post.slug.current}`
+
+const serviceLinks: Record<string, string> = {
+  'speech-therapy': 'Speech-Language Therapy',
+  'occupational-therapy': 'Occupational Therapy',
+}
+const related = (post.relatedServiceSlugs || []).filter((slug: string) => serviceLinks[slug])
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {'@type': 'ListItem', position: 1, name: 'Home', item: 'https://ntrlink.com/'},
+      {'@type': 'ListItem', position: 2, name: 'Resources', item: 'https://ntrlink.com/resources'},
+      {'@type': 'ListItem', position: 3, name: post.title, item: canonicalUrl},
+    ],
+  },
+]
+---
+
+<BaseLayout title={post.title} description={post.metaDescription} canonicalUrl={canonicalUrl} jsonLd={jsonLd}>
+  <Hero headline={post.title} />
+  <article class="post-body">
+    {post.body?.length > 0 ? (
+      <PortableText value={post.body} />
+    ) : (
+      <p class="pending-note">Full article coming soon &mdash; add the body in Sanity to replace this note.</p>
+    )}
+  </article>
+  {related.length > 0 && (
+    <p class="related-links">
+      Related: {related.map((slug: string, i: number) => (
+        <>
+          {i > 0 && ' · '}
+          <a href={`/${slug}`}>{serviceLinks[slug]}</a>
+        </>
+      ))}
+    </p>
+  )}
+</BaseLayout>
+
+<style>
+  .post-body {
+    max-width: 40rem;
+    margin: 0 auto;
+    padding: 0 2rem;
+    line-height: 1.7;
+  }
+  .pending-note {
+    opacity: 0.7;
+    font-style: italic;
+  }
+  .related-links {
+    max-width: 40rem;
+    margin: 1.5rem auto 2rem;
+    padding: 0 2rem;
+  }
+</style>

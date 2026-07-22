@@ -1,0 +1,27 @@
+---
+interface Props {
+  headline: string
+  subhead?: string
+}
+const {headline, subhead} = Astro.props
+---
+
+<section class="hero">
+  <h1>{headline}</h1>
+  {subhead && <p class="subhead">{subhead}</p>}
+  <slot />
+</section>
+
+<style>
+  .hero {
+    padding: 3rem 2rem;
+    max-width: 60rem;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .subhead {
+    white-space: pre-line;
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }
+</style>

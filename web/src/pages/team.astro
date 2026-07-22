@@ -1,0 +1,59 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Hero from '../components/Hero.astro'
+import TestimonialCard from '../components/TestimonialCard.astro'
+import {sanityFetch} from '../lib/sanity'
+
+const cms = await sanityFetch(
+  `*[_type == "page" && pageId == "team"][0]{..., testimonials[]->}`,
+)
+
+const title = cms?.metaTitle || 'Team & Culture | NTR Link'
+const description = cms?.metaDescription || 'Meet the therapists and staff behind NTR Link.'
+const heroHeadline = cms?.heroHeadline || 'The People Who Show Up Every Week'
+const testimonials = cms?.testimonials || []
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {'@type': 'ListItem', position: 1, name: 'Home', item: 'https://ntrlink.com/'},
+      {'@type': 'ListItem', position: 2, name: 'Team & Culture', item: 'https://ntrlink.com/team'},
+    ],
+  },
+]
+---
+
+<BaseLayout title={title} description={description} canonicalUrl="https://ntrlink.com/team" jsonLd={jsonLd}>
+  <Hero headline={heroHeadline} />
+  <section class="testimonials">
+    {testimonials.length > 0 ? (
+      testimonials.map((t: any) => (
+        <TestimonialCard
+          quote={t.quote}
+          attributionName={t.attributionName}
+          attributionRole={t.attributionRole}
+          attributionDistrict={t.attributionDistrict}
+        />
+      ))
+    ) : (
+      <p class="pending-note">
+        Named team quotes are on the way &mdash; add them in Sanity under Testimonials to replace this note.
+      </p>
+    )}
+  </section>
+</BaseLayout>
+
+<style>
+  .testimonials {
+    max-width: 40rem;
+    margin: 0 auto;
+    padding: 0 2rem 2rem;
+  }
+  .pending-note {
+    text-align: center;
+    opacity: 0.7;
+    font-style: italic;
+  }
+</style>
