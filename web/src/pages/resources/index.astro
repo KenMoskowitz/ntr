@@ -30,12 +30,16 @@ const jsonLd = [
 <BaseLayout title={title} description={description} canonicalUrl="https://ntrlink.com/resources" jsonLd={jsonLd}>
   <Hero headline={heroHeadline} />
   <section class="post-list section">
-    {posts.map((post) => (
-      <a class="post-card" href={`/resources/${post.slug.current}`}>
-        <h2>{post.title}</h2>
-        <p>{post.metaDescription}</p>
-      </a>
-    ))}
+    {posts.length > 0 ? (
+      posts.map((post) => (
+        <a class="post-card" href={`/resources/${post.slug.current}`}>
+          <h2>{post.title}</h2>
+          <p>{post.metaDescription}</p>
+        </a>
+      ))
+    ) : (
+      <p class="pending-note">Articles are on the way &mdash; add them in Sanity under Resource Posts.</p>
+    )}
   </section>
 </BaseLayout>
 
@@ -44,6 +48,11 @@ const jsonLd = [
     display: grid;
     gap: 1.25rem;
     max-width: 40rem;
+  }
+  .pending-note {
+    text-align: center;
+    color: var(--color-text-muted);
+    font-style: italic;
   }
   .post-card {
     display: block;
