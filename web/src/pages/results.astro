@@ -16,6 +16,16 @@ const heroHeadline = cms?.heroHeadline || 'The Numbers Behind the Claim'
 const stats = cms?.stats || []
 const testimonials = cms?.testimonials || []
 
+// Parses a free-text stat like "35+", "$2B+", "98%" into Count-Up's
+// numeric/prefix/suffix attributes so the animation always lands on the
+// exact string an editor typed in Sanity.
+function parseStat(raw: string) {
+  const match = String(raw).match(/^([^0-9.]*)([0-9.]+)(.*)$/)
+  if (!match) return {prefix: '', number: '', suffix: raw}
+  const [, prefix, number, suffix] = match
+  return {prefix, number, suffix}
+}
+
 const jsonLd = [
   {
     '@context': 'https://schema.org',
@@ -32,12 +42,17 @@ const jsonLd = [
   <Hero headline={heroHeadline} />
   {stats.length > 0 ? (
     <section class="stats-grid section">
-      {stats.map((stat: any) => (
-        <div class="stat">
-          <p class="stat-number">{stat.statNumber}</p>
-          <p class="stat-label">{stat.statLabel}</p>
-        </div>
-      ))}
+      {stats.map((stat: any, i: number) => {
+        const {prefix, number, suffix} = parseStat(stat.statNumber)
+        return (
+          <div class="stat dz-reveal" style={`--dz-delay: ${i * 0.1}s`}>
+            <p class="stat-number" data-dz-count={number || undefined} data-dz-prefix={prefix} data-dz-suffix={suffix}>
+              {stat.statNumber}
+            </p>
+            <p class="stat-label">{stat.statLabel}</p>
+          </div>
+        )
+      })}
     </section>
   ) : (
     <p class="pending-note section">
@@ -47,18 +62,19 @@ const jsonLd = [
     </p>
   )}
   <section class="testimonials section">
-    {testimonials.map((t: any) => (
+    {testimonials.map((t: any, i: number) => (
       <TestimonialCard
         quote={t.quote}
         attributionName={t.attributionName}
         attributionRole={t.attributionRole}
         attributionDistrict={t.attributionDistrict}
+        delay={i * 0.1}
       />
     ))}
   </section>
   <p class="proof-links">
-    See how this shows up in practice: <a href="/speech-therapy">Speech-Language Therapy</a> &middot;{' '}
-    <a href="/occupational-therapy">Occupational Therapy</a>
+    See how this shows up in practice: <a class="dz-underline" href="/speech-therapy">Speech-Language Therapy</a> &middot;{' '}
+    <a class="dz-underline" href="/occupational-therapy">Occupational Therapy</a>
   </p>
 </BaseLayout>
 

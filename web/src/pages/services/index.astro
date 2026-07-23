@@ -29,19 +29,19 @@ const jsonLd = [
 <BaseLayout title={title} description={description} canonicalUrl="https://ntrlink.com/services" jsonLd={jsonLd}>
   <Hero headline={heroHeadline} subhead={heroSubhead} />
   <section class="service-cards section">
-    <a class="service-card" href="/speech-therapy">
+    <a class="service-card dz-lift dz-reveal" style="--dz-delay: 0s" href="/speech-therapy">
       <h2>Speech-Language Therapy</h2>
       <p>Language, articulation, fluency, social communication, AAC.</p>
-      <span class="card-link">Learn more &rarr;</span>
+      <span class="card-link dz-underline">Learn more &rarr;</span>
     </a>
-    <a class="service-card" href="/occupational-therapy">
+    <a class="service-card dz-lift dz-reveal" style="--dz-delay: 0.12s" href="/occupational-therapy">
       <h2>Occupational Therapy</h2>
       <p>Fine motor, visual-motor integration, sensory processing, executive functioning.</p>
-      <span class="card-link">Learn more &rarr;</span>
+      <span class="card-link dz-underline">Learn more &rarr;</span>
     </a>
   </section>
-  <section class="implementation section">
-    <h2>Simple Implementation Process</h2>
+  <section class="implementation section section-alt">
+    <h2>Simple Implementation Process<span class="header-draw dz-draw"></span></h2>
     <ol>
       <li>We match your district with licensed therapists in your state.</li>
       <li>A dedicated program coordinator sets up scheduling around your school calendar.</li>
@@ -67,22 +67,30 @@ const jsonLd = [
     padding: 1.75rem;
     text-decoration: none;
     color: inherit;
-    transition: box-shadow 0.15s, transform 0.15s;
-  }
-  .service-card:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
   }
   .service-card p {
     color: var(--color-text-muted);
   }
   .card-link {
+    display: inline-block;
     font-weight: 600;
     color: var(--color-primary);
     font-family: var(--font-heading);
+    padding: 2px 0;
   }
   .implementation {
     max-width: 40rem;
+  }
+  .implementation h2 {
+    display: inline-block;
+  }
+  .header-draw {
+    display: block;
+    width: 3.5rem;
+    height: 3px;
+    background: var(--color-accent);
+    border-radius: 2px;
+    margin-top: 0.4rem;
   }
   .implementation li {
     margin-bottom: 0.5rem;

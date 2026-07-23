@@ -68,13 +68,13 @@ const jsonLd = [
 <BaseLayout title={title} description={description} canonicalUrl={canonicalUrl} jsonLd={jsonLd}>
   <Hero headline={`${stateName} School Districts, Staffed and Supported`} subhead={page.intro} />
   {page.fundingNotes && (
-    <section class="state-notes section">
+    <section class="state-notes section dz-reveal">
       <h2>Funding Notes</h2>
       <p>{page.fundingNotes}</p>
     </section>
   )}
   {page.medicaidNotes && (
-    <section class="state-notes section">
+    <section class="state-notes section dz-reveal">
       <h2>Medicaid Billing</h2>
       <p>{page.medicaidNotes}</p>
     </section>

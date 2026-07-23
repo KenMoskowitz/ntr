@@ -29,12 +29,13 @@ const jsonLd = [
   <Hero headline={heroHeadline} />
   <section class="testimonials section">
     {testimonials.length > 0 ? (
-      testimonials.map((t: any) => (
+      testimonials.map((t: any, i: number) => (
         <TestimonialCard
           quote={t.quote}
           attributionName={t.attributionName}
           attributionRole={t.attributionRole}
           attributionDistrict={t.attributionDistrict}
+          delay={i * 0.1}
         />
       ))
     ) : (

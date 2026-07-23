@@ -43,7 +43,7 @@ const jsonLd = [
     <label data-field="message-district">How can we help your district? <textarea name="message" rows="4"></textarea></label>
     <label data-field="message-candidate" hidden>Tell us about your license and availability <textarea name="message" rows="4"></textarea></label>
 
-    <button type="submit">Send</button>
+    <button type="submit" class="dz-trail-dark">Send</button>
     <p class="form-status" role="status"></p>
   </form>
 </BaseLayout>
@@ -110,17 +110,23 @@ const jsonLd = [
   .contact-form button[type='submit'] {
     padding: 0.85rem 1.5rem;
     border-radius: var(--radius-md);
-    background: var(--color-primary);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
     color: #fff;
     border: none;
-    font-weight: 600;
+    font-weight: 700;
     font-family: var(--font-heading);
     font-size: 1rem;
     cursor: pointer;
-    transition: background 0.15s;
+    box-shadow:
+      0 2px 4px rgba(11, 91, 84, 0.15),
+      0 10px 24px rgba(11, 91, 84, 0.28);
+    transition: transform 0.15s, box-shadow 0.15s;
   }
   .contact-form button[type='submit']:hover {
-    background: var(--color-primary-dark);
+    transform: translateY(-2px);
+    box-shadow:
+      0 4px 8px rgba(11, 91, 84, 0.2),
+      0 16px 36px rgba(11, 91, 84, 0.35);
   }
   .form-status {
     min-height: 1.2rem;

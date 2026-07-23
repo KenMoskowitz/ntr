@@ -9,8 +9,8 @@ const bullets = items?.length
 ---
 
 <ul class="trust-icons section">
-  {bullets.map((item) => (
-    <li><span class="dot">✓</span>{item}</li>
+  {bullets.map((item, i) => (
+    <li class="dz-reveal" style={`--dz-delay: ${i * 0.1}s`}><span class="dot">✓</span>{item}</li>
   ))}
 </ul>
 

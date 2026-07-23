@@ -31,8 +31,8 @@ const jsonLd = [
   <Hero headline={heroHeadline} />
   <section class="post-list section">
     {posts.length > 0 ? (
-      posts.map((post) => (
-        <a class="post-card" href={`/resources/${post.slug.current}`}>
+      posts.map((post, i) => (
+        <a class="post-card dz-lift dz-reveal" style={`--dz-delay: ${i * 0.1}s`} href={`/resources/${post.slug.current}`}>
           <h2>{post.title}</h2>
           <p>{post.metaDescription}</p>
         </a>
@@ -63,11 +63,6 @@ const jsonLd = [
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-sm);
     padding: 1.5rem;
-    transition: box-shadow 0.15s, transform 0.15s;
-  }
-  .post-card:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
   }
   .post-card p {
     color: var(--color-text-muted);

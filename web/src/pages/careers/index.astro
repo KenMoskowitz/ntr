@@ -32,7 +32,7 @@ const jsonLd = [
 
 <BaseLayout title={title} description={description} canonicalUrl="https://ntrlink.com/careers" jsonLd={jsonLd}>
   <Hero headline={heroHeadline} />
-  <section class="state-picker section">
+  <section class="state-picker section section-alt">
     <h2>Find jobs in your state</h2>
     <ul>
       {statePages.map((state) => (
@@ -41,7 +41,7 @@ const jsonLd = [
     </ul>
   </section>
   <section class="job-list section">
-    {jobOpenings.map((job: any) => (
+    {jobOpenings.map((job: any, i: number) => (
       <JobCard
         title={job.title}
         state={job.state}
@@ -49,6 +49,7 @@ const jsonLd = [
         description={job.description}
         datePosted={job.datePosted}
         validThrough={job.validThrough}
+        delay={i * 0.1}
       />
     ))}
   </section>

@@ -4,12 +4,13 @@ interface Props {
   attributionName?: string
   attributionRole?: string
   attributionDistrict?: string
+  delay?: number
 }
-const {quote, attributionName, attributionRole, attributionDistrict} = Astro.props
+const {quote, attributionName, attributionRole, attributionDistrict, delay = 0} = Astro.props
 const attribution = [attributionName, attributionRole, attributionDistrict].filter(Boolean).join(', ')
 ---
 
-<blockquote class="testimonial">
+<blockquote class="testimonial dz-reveal" style={`--dz-delay: ${delay}s`}>
   <p>&ldquo;{quote}&rdquo;</p>
   {attribution && <footer>&mdash; {attribution}</footer>}
 </blockquote>

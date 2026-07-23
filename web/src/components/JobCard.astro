@@ -6,8 +6,9 @@ interface Props {
   description?: string
   datePosted?: string
   validThrough?: string
+  delay?: number
 }
-const {title, state, employmentType, description, datePosted, validThrough} = Astro.props
+const {title, state, employmentType, description, datePosted, validThrough, delay = 0} = Astro.props
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -22,13 +23,13 @@ const jsonLd = {
 }
 ---
 
-<article class="job-card">
+<article class="job-card dz-lift dz-reveal" style={`--dz-delay: ${delay}s`}>
   <div class="job-card-head">
     <h3>{title}</h3>
     <span class="state-badge">{state}</span>
   </div>
   {description && <p>{description}</p>}
-  <a class="apply-link" href="/contact">Apply &rarr;</a>
+  <a class="apply-link dz-underline" href="/contact">Apply &rarr;</a>
 </article>
 
 <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -41,11 +42,6 @@ const jsonLd = {
     box-shadow: var(--shadow-sm);
     padding: 1.5rem;
     margin: 1rem 0;
-    transition: box-shadow 0.15s, transform 0.15s;
-  }
-  .job-card:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
   }
   .job-card-head {
     display: flex;
@@ -71,7 +67,9 @@ const jsonLd = {
     color: var(--color-text-muted);
   }
   .apply-link {
+    display: inline-block;
     font-weight: 600;
     color: var(--color-primary);
+    padding: 2px 0;
   }
 </style>
