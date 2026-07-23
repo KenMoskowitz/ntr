@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro'
 import Hero from '../components/Hero.astro'
 import TrustIcons from '../components/TrustIcons.astro'
+import Marquee from '../components/Marquee.astro'
 import CTABlock from '../components/CTABlock.astro'
 import {sanityFetch} from '../lib/sanity'
 
@@ -17,6 +18,27 @@ const heroSubhead =
   "Special education directors don't lose sleep over paperwork. They lose sleep over the open SLP position nobody's filled since August. NTR Link exists to close that gap, fast, with real licensed therapists who show up the same way every week.\n\nSince 2015, we've grown from one therapist's idea to a nationwide team supporting schools in nearly every related service area. We're therapist owned, therapist run, and small enough that you get one person to call instead of a ticket number."
 const bullets = cms?.bullets
 const ctaButtons = cms?.ctaButtons
+
+const usps = [
+  {
+    tint: 'mint',
+    icon: '🧭',
+    title: 'Dedicated Program Coordinator',
+    body: 'One person who knows your caseload — not a rotating help desk or a ticket number.',
+  },
+  {
+    tint: 'peach',
+    icon: '🎓',
+    title: 'State & Nationally Licensed',
+    body: 'Every therapist is licensed where your students are, before a single session starts.',
+  },
+  {
+    tint: 'blue',
+    icon: '🔗',
+    title: 'Classroom Integration Model',
+    body: 'We train on-site staff as facilitators so virtual sessions fit into the classroom, not bolt onto it.',
+  },
+]
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -38,6 +60,16 @@ const jsonLd = {
 <BaseLayout title={title} description={description} canonicalUrl="https://ntrlink.com/" jsonLd={jsonLd}>
   <Hero headline={heroHeadline} subhead={heroSubhead} />
   <TrustIcons items={bullets} />
+  <Marquee />
+  <section class="usp-grid section">
+    {usps.map((usp, i) => (
+      <div class={`icon-card tint-${usp.tint} dz-reveal`} style={`--dz-delay: ${i * 0.1}s`}>
+        <div class="icon-mark">{usp.icon}</div>
+        <h3>{usp.title}</h3>
+        <p>{usp.body}</p>
+      </div>
+    ))}
+  </section>
   <section class="services-teaser section dz-reveal">
     <p>
       Two ways we show up for your students: Speech-Language Therapy and Occupational Therapy, both delivered
@@ -45,10 +77,21 @@ const jsonLd = {
     </p>
     <a class="teaser-link dz-underline" href="/services">See our services &rarr;</a>
   </section>
-  <CTABlock buttons={ctaButtons} />
+  <div class="cta-band">
+    <div class="cta-band-inner">
+      <h2>Ready to close that staffing gap?</h2>
+      <CTABlock buttons={ctaButtons} />
+    </div>
+  </div>
 </BaseLayout>
 
 <style>
+  .usp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 1.25rem;
+    max-width: 60rem;
+  }
   .services-teaser {
     max-width: 40rem;
     text-align: center;
@@ -60,5 +103,9 @@ const jsonLd = {
   .teaser-link {
     font-weight: 600;
     font-family: var(--font-heading);
+  }
+  .cta-band .cta-block {
+    margin: 0;
+    padding: 0;
   }
 </style>

@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import Hero from '../../components/Hero.astro'
+import CTABlock from '../../components/CTABlock.astro'
 import {sanityFetch} from '../../lib/sanity'
 
 const cms = await sanityFetch(`*[_type == "page" && pageId == "services-index"][0]`)
@@ -13,6 +14,13 @@ const heroHeadline = cms?.heroHeadline || 'Two Services. One Team. Zero Guesswor
 const heroSubhead =
   cms?.heroSubhead ||
   "Two ways we show up for your students: Speech-Language Therapy and Occupational Therapy, both delivered virtually, both built around your district's actual schedule."
+
+const steps = [
+  {tint: 'mint', icon: '1', title: 'Match', body: 'We match your district with licensed therapists in your state.'},
+  {tint: 'peach', icon: '2', title: 'Schedule', body: 'A dedicated program coordinator sets up scheduling around your school calendar.'},
+  {tint: 'blue', icon: '3', title: 'Deliver', body: 'Therapists deliver sessions virtually, with on-site staff trained as facilitators.'},
+  {tint: 'lavender', icon: '4', title: 'Report', body: 'Progress reports tie back to IEP goals so your team always has current documentation.'},
+]
 
 const jsonLd = [
   {
@@ -42,13 +50,22 @@ const jsonLd = [
   </section>
   <section class="implementation section section-alt">
     <h2>Simple Implementation Process<span class="header-draw dz-draw"></span></h2>
-    <ol>
-      <li>We match your district with licensed therapists in your state.</li>
-      <li>A dedicated program coordinator sets up scheduling around your school calendar.</li>
-      <li>Therapists deliver sessions virtually, with on-site staff trained as facilitators.</li>
-      <li>Progress reports tie back to IEP goals so your team always has current documentation.</li>
-    </ol>
+    <div class="step-grid">
+      {steps.map((step, i) => (
+        <div class={`icon-card tint-${step.tint} dz-reveal`} style={`--dz-delay: ${i * 0.1}s`}>
+          <div class="icon-mark step-num">{step.icon}</div>
+          <h3>{step.title}</h3>
+          <p>{step.body}</p>
+        </div>
+      ))}
+    </div>
   </section>
+  <div class="cta-band">
+    <div class="cta-band-inner">
+      <h2>Your students are waiting. Let's close the gap.</h2>
+      <CTABlock buttons={[{label: 'Request services', href: '/contact'}, {label: 'See results', href: '/results'}]} />
+    </div>
+  </div>
 </BaseLayout>
 
 <style>
@@ -79,7 +96,7 @@ const jsonLd = [
     padding: 2px 0;
   }
   .implementation {
-    max-width: 40rem;
+    max-width: 60rem;
   }
   .implementation h2 {
     display: inline-block;
@@ -91,9 +108,16 @@ const jsonLd = [
     background: var(--color-accent);
     border-radius: 2px;
     margin-top: 0.4rem;
+    margin-bottom: 1.5rem;
   }
-  .implementation li {
-    margin-bottom: 0.5rem;
-    color: var(--color-text-muted);
+  .step-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: 1.25rem;
+  }
+  .step-num {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    background: rgba(255, 255, 255, 0.75) !important;
   }
 </style>

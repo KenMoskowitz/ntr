@@ -9,6 +9,7 @@ import resourcePost from './resourcePost'
 import testimonial from './testimonial'
 import outcomeStat from './outcomeStat'
 import contactSubmission from './contactSubmission'
+import newsletterSubscriber from './newsletterSubscriber'
 
 export const schemaTypes = [
   siteSettings,
@@ -22,4 +23,5 @@ export const schemaTypes = [
   testimonial,
   outcomeStat,
   contactSubmission,
+  newsletterSubscriber,
 ]

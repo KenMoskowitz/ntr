@@ -78,8 +78,9 @@ five minutes of manual setup — see "Manual setup" below.
    - `SANITY_PROJECT_ID`, `SANITY_DATASET` (=`production`) — public, used by
      the Astro build to read content.
    - `SANITY_WRITE_TOKEN` — a **second**, separate robot token (Editor role),
-     server-only, used only by `web/api/contact.js` to write leads. Never
-     reuse the seed token here or expose either token client-side.
+     server-only, used by `web/api/contact.js` and `web/api/subscribe.js` to
+     write leads/subscribers. Never reuse the seed token here or expose
+     either token client-side.
 4. Set up the Sanity → Vercel deploy hook (Sanity project settings → Webhooks
    → point at a Vercel Deploy Hook URL) so publishing in Studio triggers a
    rebuild. Document both URLs here once created.
@@ -100,6 +101,10 @@ follow-up, not a blocker to launch.
 **Before launch:** submit the live form once and confirm the document shows
 up in Studio (this is also on the plan's own Google Search Console
 checklist).
+
+The footer newsletter bar works the same way — `web/api/subscribe.js` writes
+to a `newsletterSubscriber` document in Sanity. Same before-launch check
+applies: submit it once, confirm it shows up in Studio.
 
 ## Real content gaps — do not fabricate these
 

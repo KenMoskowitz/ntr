@@ -26,6 +26,8 @@ function parseStat(raw: string) {
   return {prefix, number, suffix}
 }
 
+const TINTS = ['mint', 'peach', 'blue', 'lavender']
+
 const jsonLd = [
   {
     '@context': 'https://schema.org',
@@ -44,8 +46,9 @@ const jsonLd = [
     <section class="stats-grid section">
       {stats.map((stat: any, i: number) => {
         const {prefix, number, suffix} = parseStat(stat.statNumber)
+        const tint = TINTS[i % TINTS.length]
         return (
-          <div class="stat dz-reveal" style={`--dz-delay: ${i * 0.1}s`}>
+          <div class={`stat icon-card tint-${tint} dz-reveal`} style={`--dz-delay: ${i * 0.1}s`}>
             <p class="stat-number" data-dz-count={number || undefined} data-dz-prefix={prefix} data-dz-suffix={suffix}>
               {stat.statNumber}
             </p>
@@ -85,13 +88,6 @@ const jsonLd = [
     gap: 1.5rem;
     max-width: 50rem;
     text-align: center;
-  }
-  .stat {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-sm);
-    padding: 1.5rem 1rem;
   }
   .stat-number {
     font-family: var(--font-heading);

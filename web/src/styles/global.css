@@ -12,12 +12,25 @@
   --color-footer-bg: #0b3b3a;
   --color-footer-text: #eef7f6;
 
+  /* Pastel tint rotation for icon cards — EducateX-style multi-color card
+     backgrounds instead of one repeated brand tint. Backgrounds only;
+     never used for text/buttons, so brand color stays teal/amber. */
+  --tint-mint: #e2f5ee;
+  --tint-mint-icon: #0f766e;
+  --tint-peach: #fdece1;
+  --tint-peach-icon: #d9622b;
+  --tint-blue: #e5f0fb;
+  --tint-blue-icon: #2563a8;
+  --tint-lavender: #efe9fb;
+  --tint-lavender-icon: #7c53c9;
+
   --font-heading: 'Bricolage Grotesque', system-ui, -apple-system, sans-serif;
   --font-body: 'Inter', system-ui, -apple-system, sans-serif;
 
   --radius-sm: 0.5rem;
   --radius-md: 0.85rem;
   --radius-lg: 1.25rem;
+  --radius-pill: 999px;
   --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08);
   --shadow-md: 0 10px 30px -8px rgba(15, 23, 42, 0.15);
   --container: 72rem;
@@ -192,7 +205,7 @@ main {
   content: '';
   position: absolute;
   inset: -2px;
-  border-radius: calc(var(--radius-md) + 2px);
+  border-radius: calc(var(--radius-pill) + 2px);
   padding: 2px;
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
@@ -281,4 +294,158 @@ main {
     transform: none;
     animation: none;
   }
+}
+
+/* ============================================================
+   EducateX-inspired vibe: pastel icon cards, doodles, marquee
+   ============================================================ */
+
+.icon-card {
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  border: 1px solid transparent;
+}
+.icon-card .icon-mark {
+  width: 2.75rem;
+  height: 2.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+  background: rgba(255, 255, 255, 0.6);
+}
+.icon-card h3 {
+  font-size: 1.05rem;
+  margin-bottom: 0.35rem;
+}
+.icon-card p {
+  color: var(--color-text-muted);
+  font-size: 0.92rem;
+  margin: 0;
+}
+.icon-card.tint-mint {
+  background: var(--tint-mint);
+}
+.icon-card.tint-mint .icon-mark {
+  color: var(--tint-mint-icon);
+}
+.icon-card.tint-peach {
+  background: var(--tint-peach);
+}
+.icon-card.tint-peach .icon-mark {
+  color: var(--tint-peach-icon);
+}
+.icon-card.tint-blue {
+  background: var(--tint-blue);
+}
+.icon-card.tint-blue .icon-mark {
+  color: var(--tint-blue-icon);
+}
+.icon-card.tint-lavender {
+  background: var(--tint-lavender);
+}
+.icon-card.tint-lavender .icon-mark {
+  color: var(--tint-lavender-icon);
+}
+
+/* Doodle accents — small decorative marks near headlines/sections */
+.doodle {
+  position: absolute;
+  pointer-events: none;
+  color: var(--color-accent);
+  opacity: 0.6;
+}
+.doodle-dots {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+.doodle-dots span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  display: block;
+}
+
+/* Marquee ticker */
+.marquee {
+  overflow: hidden;
+  background: var(--color-primary);
+  padding: 0.9rem 0;
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 26s linear infinite;
+}
+.marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #fff;
+  white-space: nowrap;
+  padding: 0 1.25rem;
+}
+.marquee-item::after {
+  content: '\2726';
+  margin-left: 1.25rem;
+  color: var(--color-accent);
+}
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}
+
+/* Full-bleed CTA band */
+.cta-band {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  color: #fff;
+}
+.cta-band-inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+.cta-band h2 {
+  color: #fff;
+  margin: 0;
+  font-size: clamp(1.3rem, 2.4vw, 1.8rem);
+}
+.cta-band .cta-button.primary {
+  background: var(--color-accent);
+  color: #10201f;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+}
+.cta-band .cta-button.primary:hover {
+  background: var(--color-accent-dark);
+}
+.cta-band .cta-button.secondary {
+  background: transparent;
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.6);
+}
+.cta-band .cta-button.secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
 }

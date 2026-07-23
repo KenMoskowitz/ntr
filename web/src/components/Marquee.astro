@@ -1,0 +1,19 @@
+---
+interface Props {
+  items?: string[]
+}
+const {items} = Astro.props
+const phrases = items?.length
+  ? items
+  : ['Therapist Owned', 'Licensed Nationwide', 'One Point of Contact', 'Data-Driven Progress Reporting']
+// Duplicated once so the CSS animation (-50% translateX) loops seamlessly.
+const looped = [...phrases, ...phrases]
+---
+
+<div class="marquee">
+  <div class="marquee-track">
+    {looped.map((phrase) => (
+      <span class="marquee-item">{phrase}</span>
+    ))}
+  </div>
+</div>

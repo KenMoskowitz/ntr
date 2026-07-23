@@ -22,6 +22,13 @@ const jsonLd = [
     ],
   },
 ]
+
+const whyUs = [
+  {tint: 'mint', icon: '🌱', title: 'Founded on a Gap', body: 'Started in 2015 by a therapist who saw the staffing shortage firsthand — not a staffing agency that added therapy later.'},
+  {tint: 'peach', icon: '🤝', title: 'One Point of Contact', body: 'A dedicated program coordinator per district, not a rotating help desk or a ticket queue.'},
+  {tint: 'blue', icon: '📊', title: 'Data Tied to IEP Goals', body: 'Progress reporting ties directly to IEP goals, so compliance data and outcome data are the same data.'},
+]
+
 ---
 
 <BaseLayout title={title} description={description} canonicalUrl="https://ntrlink.com/about" jsonLd={jsonLd}>
@@ -35,11 +42,19 @@ const jsonLd = [
       <p>
         Every district gets a dedicated program coordinator: one person who knows your caseload, not a rotating help
         desk. Our therapists are state and nationally licensed, and we train on-site staff as facilitators so virtual
-        sessions integrate into the classroom instead of feeling bolted on. Progress reporting ties directly to IEP
-        goals, so the data your team needs for compliance is the same data that shows whether therapy is working.
+        sessions integrate into the classroom instead of feeling bolted on.
       </p>
     </div>
   </Hero>
+  <section class="why-grid section">
+    {whyUs.map((item, i) => (
+      <div class={`icon-card tint-${item.tint} dz-reveal`} style={`--dz-delay: ${i * 0.1}s`}>
+        <div class="icon-mark">{item.icon}</div>
+        <h3>{item.title}</h3>
+        <p>{item.body}</p>
+      </div>
+    ))}
+  </section>
   <CTABlock />
 </BaseLayout>
 
@@ -50,5 +65,11 @@ const jsonLd = [
     text-align: left;
     line-height: 1.7;
     color: var(--color-text-muted);
+  }
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 1.25rem;
+    max-width: 60rem;
   }
 </style>

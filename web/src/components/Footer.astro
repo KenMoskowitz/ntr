@@ -3,7 +3,7 @@ import {urlFor} from '../lib/sanity'
 
 interface Props {
   navigation?: {footerLinks?: {label: string; href: string}[]} | null
-  siteSettings?: {legalName?: string; foundedYear?: number; facebookUrl?: string; instagramUrl?: string; linkedinUrl?: string; mascot?: any} | null
+  siteSettings?: {legalName?: string; foundedYear?: number; facebookUrl?: string; instagramUrl?: string; linkedinUrl?: string; mascot?: any; siteName?: string} | null
 }
 const {navigation, siteSettings} = Astro.props
 
@@ -19,11 +19,23 @@ const links = navigation?.footerLinks?.length
     ]
 
 const legalName = siteSettings?.legalName || 'National TeleTherapy Resources'
+const siteName = siteSettings?.siteName || 'NTR Link'
 const year = new Date().getFullYear()
 const mascotUrl = siteSettings?.mascot ? urlFor(siteSettings.mascot).width(120).url() : null
 ---
 
 <footer class="site-footer">
+  <div class="newsletter-bar">
+    <span class="newsletter-brand">{siteName}</span>
+    <form id="newsletter-form" class="newsletter-form">
+      <label class="hp"><input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+      <span class="newsletter-label">Subscribe <span class="accent">newsletter</span></span>
+      <input type="email" name="email" placeholder="Your email address" required />
+      <button type="submit" class="dz-trail-dark">Subscribe</button>
+    </form>
+  </div>
+  <p class="newsletter-status" role="status"></p>
+
   <div class="inner">
     {mascotUrl ? (
       <img class="mascot" src={mascotUrl} alt="Link the Elephant, NTR Link mascot" width="80" height="94" />
@@ -52,10 +64,85 @@ const mascotUrl = siteSettings?.mascot ? urlFor(siteSettings.mascot).width(120).
     color: var(--color-footer-text);
     margin-top: 4rem;
   }
+  .newsletter-bar {
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 1.5rem 1.5rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .newsletter-brand {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+  .newsletter-form {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-pill);
+    padding: 0.4rem 0.4rem 0.4rem 1.1rem;
+  }
+  .newsletter-label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+  .newsletter-label .accent {
+    color: var(--color-accent);
+  }
+  .newsletter-form input[type='email'] {
+    font: inherit;
+    background: transparent;
+    border: none;
+    color: var(--color-footer-text);
+    padding: 0.5rem 0.25rem;
+    min-width: 12rem;
+  }
+  .newsletter-form input[type='email']::placeholder {
+    color: rgba(238, 247, 246, 0.55);
+  }
+  .newsletter-form input[type='email']:focus {
+    outline: none;
+  }
+  .newsletter-form button {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.88rem;
+    padding: 0.6rem 1.3rem;
+    border-radius: var(--radius-pill);
+    background: var(--color-accent);
+    color: #10201f;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s;
+  }
+  .newsletter-form button:hover {
+    background: var(--color-accent-dark);
+  }
+  .hp {
+    position: absolute;
+    left: -9999px;
+  }
+  .newsletter-status {
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    min-height: 1rem;
+    font-size: 0.82rem;
+    color: var(--color-accent);
+  }
   .inner {
     max-width: var(--container);
     margin: 0 auto;
-    padding: 3rem 1.5rem 2rem;
+    padding: 2rem 1.5rem 2rem;
     text-align: center;
   }
   .mascot-mark {
@@ -105,4 +192,37 @@ const mascotUrl = siteSettings?.mascot ? urlFor(siteSettings.mascot).width(120).
     opacity: 0.6;
     margin: 0;
   }
+  @media (max-width: 640px) {
+    .newsletter-bar {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .newsletter-form {
+      justify-content: space-between;
+    }
+  }
 </style>
+
+<script>
+  const form = document.getElementById('newsletter-form') as HTMLFormElement | null
+  const status = document.querySelector('.newsletter-status') as HTMLElement | null
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    if (!status) return
+    status.textContent = 'Subscribing…'
+    const formData = new FormData(form)
+    const payload = Object.fromEntries(formData.entries())
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload),
+      })
+      if (!res.ok) throw new Error('request failed')
+      status.textContent = "Thanks — you're on the list."
+      form.reset()
+    } catch {
+      status.textContent = 'Something went wrong. Please try again.'
+    }
+  })
+</script>
