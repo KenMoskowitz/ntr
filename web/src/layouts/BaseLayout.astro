@@ -2,6 +2,7 @@
 import Header from '../components/Header.astro'
 import Footer from '../components/Footer.astro'
 import {sanityFetch} from '../lib/sanity'
+import '../styles/global.css'
 
 interface Props {
   title: string
@@ -45,6 +46,12 @@ const jsonLdBlocks = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : []
     {ogImage && <meta name="twitter:image" content={ogImage} />}
 
     <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
 
     {jsonLdBlocks.map((block) => (
       <script type="application/ld+json" set:html={JSON.stringify(block)} />

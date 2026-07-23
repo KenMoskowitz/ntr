@@ -1,7 +1,9 @@
 ---
+import {urlFor} from '../lib/sanity'
+
 interface Props {
   navigation?: {headerLinks?: {label: string; href: string}[]} | null
-  siteSettings?: {phone?: string; siteName?: string} | null
+  siteSettings?: {phone?: string; siteName?: string; logo?: any} | null
 }
 const {navigation, siteSettings} = Astro.props
 
@@ -17,46 +19,96 @@ const links = navigation?.headerLinks?.length
 
 const phone = siteSettings?.phone || '844-687-5465'
 const siteName = siteSettings?.siteName || 'NTR Link'
+const logoUrl = siteSettings?.logo ? urlFor(siteSettings.logo).width(160).url() : null
 ---
 
 <header class="site-header">
-  <a class="logo" href="/">
-    <img src="/images/logo-header.png" alt={siteName} width="160" height="48" />
-  </a>
-  <nav>
-    <ul>
-      {links.map((link) => (
-        <li><a href={link.href}>{link.label}</a></li>
-      ))}
-    </ul>
-  </nav>
-  <a class="header-phone" href={`tel:${phone.replace(/[^0-9+]/g, '')}`}>{phone}</a>
+  <div class="inner">
+    <a class="logo" href="/">
+      {logoUrl ? (
+        <img src={logoUrl} alt={siteName} height="40" />
+      ) : (
+        <span class="logo-text"><span class="logo-mark">🐘</span>{siteName}</span>
+      )}
+    </a>
+    <nav>
+      <ul>
+        {links.map((link) => (
+          <li><a href={link.href}>{link.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+    <a class="header-phone" href={`tel:${phone.replace(/[^0-9+]/g, '')}`}>{phone}</a>
+  </div>
 </header>
 
 <style>
   .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: var(--color-surface);
+    box-shadow: var(--shadow-sm);
+  }
+  .inner {
+    max-width: var(--container);
+    margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1.5rem;
-    padding: 1rem 2rem;
+    padding: 1rem 1.5rem;
+  }
+  .logo {
+    flex-shrink: 0;
+  }
+  .logo-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--color-primary-dark);
+  }
+  .logo-mark {
+    font-size: 1.5rem;
   }
   nav ul {
     display: flex;
-    gap: 1.5rem;
+    gap: 1.75rem;
     list-style: none;
     margin: 0;
     padding: 0;
   }
   nav a {
     text-decoration: none;
-    color: inherit;
+    color: var(--color-text);
     font-weight: 600;
+    font-size: 0.95rem;
+    padding-bottom: 0.2rem;
+    border-bottom: 2px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  nav a:hover {
+    color: var(--color-primary);
+    border-color: var(--color-accent);
   }
   .header-phone {
+    font-family: var(--font-heading);
     font-weight: 700;
     text-decoration: none;
-    color: inherit;
+    color: var(--color-primary-dark);
     white-space: nowrap;
+    flex-shrink: 0;
+  }
+  @media (max-width: 720px) {
+    nav ul {
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .header-phone {
+      display: none;
+    }
   }
 </style>

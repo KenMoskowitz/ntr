@@ -12,6 +12,7 @@ export default defineType({
     defineField({name: 'email', type: 'string', initialValue: 'info@ntrlink.com'}),
     defineField({name: 'foundedYear', type: 'number', initialValue: 2015}),
     defineField({name: 'logo', type: 'image'}),
+    defineField({name: 'mascot', title: 'Mascot (Link the Elephant)', type: 'image'}),
     defineField({name: 'facebookUrl', type: 'url'}),
     defineField({name: 'instagramUrl', type: 'url'}),
     defineField({name: 'linkedinUrl', type: 'url'}),

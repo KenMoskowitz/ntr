@@ -55,9 +55,9 @@ const jsonLd = [
 <BaseLayout title={page.metaTitle} description={page.metaDescription} canonicalUrl={canonicalUrl} jsonLd={jsonLd}>
   <Hero headline={`${page.stateName} Licensed? We're Hiring.`} subhead={page.intro} />
   {page.licenseNote && (
-    <p class="license-note">{page.licenseNote}</p>
+    <p class="license-note section">{page.licenseNote}</p>
   )}
-  <section class="job-list">
+  <section class="job-list section">
     {page.openRoles?.length > 0 ? (
       page.openRoles.map((job: any) => (
         <JobCard
@@ -73,7 +73,7 @@ const jsonLd = [
       <p class="pending-note">No open roles posted for {page.stateName} right now — check back soon.</p>
     )}
   </section>
-  <p class="difference-note">
+  <p class="difference-note section">
     NTR Link isn't a staffing agency ticket queue: one point of contact, a therapist-run culture, and real onboarding
     before your first session.
   </p>
@@ -82,23 +82,22 @@ const jsonLd = [
 <style>
   .license-note {
     max-width: 40rem;
-    margin: 0 auto 1rem;
-    padding: 0 2rem;
-    opacity: 0.8;
+    padding-top: 0;
+    padding-bottom: 0;
+    color: var(--color-text-muted);
     font-size: 0.9rem;
   }
   .job-list {
     max-width: 40rem;
-    margin: 0 auto;
-    padding: 0 2rem;
+    padding-top: 0;
   }
   .pending-note {
-    opacity: 0.7;
+    color: var(--color-text-muted);
     font-style: italic;
   }
   .difference-note {
     max-width: 40rem;
-    margin: 1.5rem auto 2rem;
-    padding: 0 2rem;
+    padding-top: 0;
+    color: var(--color-text-muted);
   }
 </style>

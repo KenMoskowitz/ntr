@@ -36,7 +36,7 @@ const jsonLd = [
 
 <BaseLayout title={post.title} description={post.metaDescription} canonicalUrl={canonicalUrl} jsonLd={jsonLd}>
   <Hero headline={post.title} />
-  <article class="post-body">
+  <article class="post-body section">
     {post.body?.length > 0 ? (
       <PortableText value={post.body} />
     ) : (
@@ -44,7 +44,7 @@ const jsonLd = [
     )}
   </article>
   {related.length > 0 && (
-    <p class="related-links">
+    <p class="related-links section">
       Related: {related.map((slug: string, i: number) => (
         <>
           {i > 0 && ' · '}
@@ -58,17 +58,16 @@ const jsonLd = [
 <style>
   .post-body {
     max-width: 40rem;
-    margin: 0 auto;
-    padding: 0 2rem;
     line-height: 1.7;
+    color: var(--color-text);
   }
   .pending-note {
-    opacity: 0.7;
+    color: var(--color-text-muted);
     font-style: italic;
   }
   .related-links {
     max-width: 40rem;
-    margin: 1.5rem auto 2rem;
-    padding: 0 2rem;
+    padding-top: 0;
+    color: var(--color-text-muted);
   }
 </style>

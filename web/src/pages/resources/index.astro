@@ -29,7 +29,7 @@ const jsonLd = [
 
 <BaseLayout title={title} description={description} canonicalUrl="https://ntrlink.com/resources" jsonLd={jsonLd}>
   <Hero headline={heroHeadline} />
-  <section class="post-list">
+  <section class="post-list section">
     {posts.map((post) => (
       <a class="post-card" href={`/resources/${post.slug.current}`}>
         <h2>{post.title}</h2>
@@ -42,17 +42,26 @@ const jsonLd = [
 <style>
   .post-list {
     display: grid;
-    gap: 1.5rem;
+    gap: 1.25rem;
     max-width: 40rem;
-    margin: 0 auto;
-    padding: 0 2rem 2rem;
   }
   .post-card {
     display: block;
     text-decoration: none;
     color: inherit;
-    border: 1px solid #ddd;
-    border-radius: 0.5rem;
-    padding: 1.25rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    padding: 1.5rem;
+    transition: box-shadow 0.15s, transform 0.15s;
+  }
+  .post-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+  .post-card p {
+    color: var(--color-text-muted);
+    margin: 0;
   }
 </style>

@@ -23,23 +23,55 @@ const jsonLd = {
 ---
 
 <article class="job-card">
-  <h3>{title}</h3>
-  <p class="state">{state}</p>
+  <div class="job-card-head">
+    <h3>{title}</h3>
+    <span class="state-badge">{state}</span>
+  </div>
   {description && <p>{description}</p>}
-  <a href="/contact">Apply</a>
+  <a class="apply-link" href="/contact">Apply &rarr;</a>
 </article>
 
 <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
 <style>
   .job-card {
-    border: 1px solid #ddd;
-    border-radius: 0.5rem;
-    padding: 1.25rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    padding: 1.5rem;
     margin: 1rem 0;
+    transition: box-shadow 0.15s, transform 0.15s;
   }
-  .state {
+  .job-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+  .job-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+  .job-card h3 {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+  .state-badge {
+    background: var(--color-primary-light);
+    color: var(--color-primary-dark);
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .job-card p {
+    color: var(--color-text-muted);
+  }
+  .apply-link {
     font-weight: 600;
-    opacity: 0.75;
+    color: var(--color-primary);
   }
 </style>

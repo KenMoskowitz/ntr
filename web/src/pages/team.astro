@@ -27,7 +27,7 @@ const jsonLd = [
 
 <BaseLayout title={title} description={description} canonicalUrl="https://ntrlink.com/team" jsonLd={jsonLd}>
   <Hero headline={heroHeadline} />
-  <section class="testimonials">
+  <section class="testimonials section">
     {testimonials.length > 0 ? (
       testimonials.map((t: any) => (
         <TestimonialCard
@@ -48,12 +48,10 @@ const jsonLd = [
 <style>
   .testimonials {
     max-width: 40rem;
-    margin: 0 auto;
-    padding: 0 2rem 2rem;
   }
   .pending-note {
     text-align: center;
-    opacity: 0.7;
+    color: var(--color-text-muted);
     font-style: italic;
   }
 </style>

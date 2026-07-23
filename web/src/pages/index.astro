@@ -38,12 +38,12 @@ const jsonLd = {
 <BaseLayout title={title} description={description} canonicalUrl="https://ntrlink.com/" jsonLd={jsonLd}>
   <Hero headline={heroHeadline} subhead={heroSubhead} />
   <TrustIcons items={bullets} />
-  <section class="services-teaser">
+  <section class="services-teaser section">
     <p>
       Two ways we show up for your students: Speech-Language Therapy and Occupational Therapy, both delivered
       virtually, both built around your district's actual schedule.
     </p>
-    <a href="/services">See our services &rarr;</a>
+    <a class="teaser-link" href="/services">See our services &rarr;</a>
   </section>
   <CTABlock buttons={ctaButtons} />
 </BaseLayout>
@@ -51,8 +51,14 @@ const jsonLd = {
 <style>
   .services-teaser {
     max-width: 40rem;
-    margin: 0 auto;
     text-align: center;
-    padding: 0 2rem;
+  }
+  .services-teaser p {
+    color: var(--color-text-muted);
+    font-size: 1.05rem;
+  }
+  .teaser-link {
+    font-weight: 600;
+    font-family: var(--font-heading);
   }
 </style>

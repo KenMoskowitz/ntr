@@ -31,7 +31,7 @@ const jsonLd = [
 <BaseLayout title={title} description={description} canonicalUrl="https://ntrlink.com/results" jsonLd={jsonLd}>
   <Hero headline={heroHeadline} />
   {stats.length > 0 ? (
-    <section class="stats-grid">
+    <section class="stats-grid section">
       {stats.map((stat: any) => (
         <div class="stat">
           <p class="stat-number">{stat.statNumber}</p>
@@ -40,13 +40,13 @@ const jsonLd = [
       ))}
     </section>
   ) : (
-    <p class="pending-note">
+    <p class="pending-note section">
       We're building this page around real numbers &mdash; therapist retention, average time to fill an open
       position, districts served, IEP goal completion rates. Add them in Sanity under Outcome Stats as they're
       tracked.
     </p>
   )}
-  <section class="testimonials">
+  <section class="testimonials section">
     {testimonials.map((t: any) => (
       <TestimonialCard
         quote={t.quote}
@@ -68,34 +68,37 @@ const jsonLd = [
     grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
     gap: 1.5rem;
     max-width: 50rem;
-    margin: 0 auto 2rem;
-    padding: 0 2rem;
     text-align: center;
   }
+  .stat {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    padding: 1.5rem 1rem;
+  }
   .stat-number {
-    font-size: 2rem;
-    font-weight: 700;
+    font-family: var(--font-heading);
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: var(--color-primary);
     margin: 0;
   }
   .stat-label {
     margin: 0;
-    opacity: 0.75;
+    color: var(--color-text-muted);
   }
   .pending-note {
     max-width: 40rem;
-    margin: 0 auto 2rem;
-    padding: 0 2rem;
     text-align: center;
-    opacity: 0.7;
+    color: var(--color-text-muted);
     font-style: italic;
   }
   .testimonials {
     max-width: 40rem;
-    margin: 0 auto;
-    padding: 0 2rem;
   }
   .proof-links {
     text-align: center;
-    padding: 2rem;
+    padding: 0 1.5rem 3rem;
   }
 </style>

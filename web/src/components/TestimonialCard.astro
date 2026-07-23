@@ -16,13 +16,25 @@ const attribution = [attributionName, attributionRole, attributionDistrict].filt
 
 <style>
   .testimonial {
-    border-left: 3px solid currentColor;
-    padding-left: 1rem;
-    margin: 1.5rem 0;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-left: 4px solid var(--color-accent);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    padding: 1.5rem 1.75rem;
+    margin: 1.25rem 0;
+  }
+  .testimonial p {
+    margin: 0;
+    font-size: 1.05rem;
+    font-style: italic;
+    color: var(--color-text);
   }
   footer {
-    margin-top: 0.5rem;
+    margin-top: 0.75rem;
     font-weight: 600;
     font-size: 0.9rem;
+    color: var(--color-text-muted);
+    font-style: normal;
   }
 </style>
